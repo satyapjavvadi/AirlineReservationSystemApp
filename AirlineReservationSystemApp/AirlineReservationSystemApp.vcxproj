@@ -152,6 +152,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AirlineReservationSystemApp.cpp" />
+    <ClCompile Include="Passenger.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Passenger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,9 +3,12 @@
 
 #include <iostream>
 
+
 using namespace std;
+//using namespace AirlineReservationSystemApp;
 
 int displayMenu();
+void makeReservation();
 
 int main()
 {
@@ -17,7 +20,7 @@ int main()
 		case 0: 
 			return 0;
 		case 1:
-			//reserveSeat();
+			makeReservation();
 			break;
 		case 2:
 			//showFlightSchedule();
@@ -58,5 +61,17 @@ int displayMenu()
 	cin >> choice;
 
 	return choice;
+
+}
+
+void makeReservation()
+{
+	string firstName;
+	string lastName;
+	 
+	cout << " firstName? ";
+	cin >> firstName;
+	cout << " lastName? ";
+	cin >> lastName;
 
 }
