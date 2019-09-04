@@ -2,16 +2,19 @@
 //
 
 #include <iostream>
+#include "Database.h"
 
 
 using namespace std;
-//using namespace AirlineReservationSystemApp;
+using namespace AirlineReservationSystemApp;
 
 int displayMenu();
-void makeReservation();
+void makeReservation(Database& db);
 
 int main()
 {
+	Database passengerDB;
+
 	while (true)
 	{
 		int choice = displayMenu();
@@ -20,7 +23,7 @@ int main()
 		case 0: 
 			return 0;
 		case 1:
-			makeReservation();
+			makeReservation(passengerDB);
 			break;
 		case 2:
 			//showFlightSchedule();
@@ -64,14 +67,22 @@ int displayMenu()
 
 }
 
-void makeReservation()
+void makeReservation(Database& db)
 {
 	string firstName;
 	string lastName;
+	string emailAddress;
+	string passportNumber;
 	 
 	cout << " firstName? ";
 	cin >> firstName;
 	cout << " lastName? ";
 	cin >> lastName;
+	cout << "emailAddress? ";
+	cin >> emailAddress;
+	cout << "passportNumber? ";
+	cin >> passportNumber;
+
+	db.makeReservation(firstName, lastName, emailAddress, passportNumber);
 
 }

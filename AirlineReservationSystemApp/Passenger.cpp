@@ -5,7 +5,8 @@ using namespace std;
 
 namespace AirlineReservationSystemApp
 {
-	Passenger::Passenger(const std::string& firstName, const std::string& lastName) : pFirstName(firstName), pLastName(lastName)
+	Passenger::Passenger(const std::string& firstName, const std::string& lastName, const std::string& emailAddress, const std::string& passportNumber) 
+		: pFirstName(firstName), pLastName(lastName), pEmailAddress(emailAddress), pPassportNumber(passportNumber)
 	{
 		//pFirstName = firstName;
 		//pLastName = lastName;
@@ -51,6 +52,16 @@ namespace AirlineReservationSystemApp
 		return pPassportNumber;
 	}
 
+	void Passenger::setPassengerSeatNumber(int seatNumber)
+	{
+		pPassengerSeatNumber = seatNumber;
+	}
+
+	int Passenger::getPassengerSeatNumber() const
+	{
+		return pPassengerSeatNumber;
+	}
+
 	bool Passenger::reserveSeat() const
 	{
 		return pSeatNumber;
@@ -59,11 +70,13 @@ namespace AirlineReservationSystemApp
 	
 	void Passenger::makeReservation() const
 	{
-		cout << "Passenger: " << getLastName() << ", " << getFirstName() << endl;
-		cout << "-------------------------" << endl;		
-		cout << "Passenger EmailAddress: " << getEmailAddress() << endl;
-		cout << "Passenger PassportNumber: " << getPassportNumber() << endl;
-		cout << (reserveSeat() ? "seat number alloted" : "seat number is not assigned") << endl;
+		cout << "Reservation Details:" << endl;
+		cout << "-------------------------" << endl;	
+		cout << "Name: " << getLastName() << ", " << getFirstName() << endl;			
+		cout << "EmailAddress: " << getEmailAddress() << endl;
+		cout << "PassportNumber: " << getPassportNumber() << endl;
+		cout << "Alloted seat number: " << getPassengerSeatNumber() << endl;
+		//cout << (reserveSeat() ? "seat number alloted" : "seat number is not assigned") << endl;
 		cout << endl;
 	}
 }

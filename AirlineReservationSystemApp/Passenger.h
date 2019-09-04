@@ -3,11 +3,12 @@
 
 namespace AirlineReservationSystemApp
 {
+	const int kDefaultStartingSeatNumber = 10;
 	class Passenger
 	{
 	public:
 		Passenger() = default;
-		Passenger(const std::string& firstName, const std::string& lastName);
+		Passenger(const std::string& firstName, const std::string& lastName, const std::string& emailAddress, const std::string& passportNumber);
 		
 		void makeReservation() const;
 
@@ -23,6 +24,9 @@ namespace AirlineReservationSystemApp
 
 		void setPassportNumber(const std::string passportNumber);
 		const std::string& getPassportNumber() const;
+
+		void setPassengerSeatNumber(int seatNumber);
+		int getPassengerSeatNumber() const;
 		
 		bool reserveSeat() const;
 
@@ -32,6 +36,7 @@ namespace AirlineReservationSystemApp
 		std::string pLastName;
 		std::string pEmailAddress;
 		std::string pPassportNumber;
+		int pPassengerSeatNumber = -1;
 		bool pSeatNumber = false;
 	};
 
