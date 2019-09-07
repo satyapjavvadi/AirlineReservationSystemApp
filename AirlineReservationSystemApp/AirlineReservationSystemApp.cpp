@@ -4,16 +4,20 @@
 #include <iostream>
 #include "Database.h"
 
-
 using namespace std;
 using namespace AirlineReservationSystemApp;
 
 int displayMenu();
-void makeReservation(Database& db);
+void makeReservation(Database& db1);
+void showPassengerDetails(Database& db1);
+void showFlightSchedule(Database& db2);
 
 int main()
 {
 	Database passengerDB;
+	Database flightDB;
+	Flight theFlight;
+		
 
 	while (true)
 	{
@@ -22,14 +26,15 @@ int main()
 		{
 		case 0: 
 			return 0;
-		case 1:
-			makeReservation(passengerDB);
+		case 1:			
+			theFlight.displayFlightSchedule();
+			showFlightSchedule(flightDB);
 			break;
 		case 2:
-			//showFlightSchedule();
+			showFlightSchedule(flightDB);
 			break;
 		case 3:
-			//showPassengerDetails();
+			//showPassengerDetails(passengerDB);
 			break;
 		case 4:
 			//showFlightDetails();
@@ -67,7 +72,7 @@ int displayMenu()
 
 }
 
-void makeReservation(Database& db)
+void makeReservation(Database& db1)
 {
 	string firstName;
 	string lastName;
@@ -83,6 +88,40 @@ void makeReservation(Database& db)
 	cout << "passportNumber? ";
 	cin >> passportNumber;
 
-	db.makeReservation(firstName, lastName, emailAddress, passportNumber);
+	db1.addPassenger(firstName, lastName, emailAddress, passportNumber);
+
+}
+
+void showPassengerDetails(Database& db1)
+{
+	int passengerNumber;
+	cout << "Passenger number: ";
+	cin >> passengerNumber;
+
+	db1.getPassenger(passengerNumber).display();
+
+}
+
+
+void showFlightSchedule(Database& db2)
+{
+	string flightNumber;
+	string departureCity;
+	string arrivalCity;
+	//string departureTime;
+	//string arrivalTime;
+	int availableSeats = 2;
+	int seatNumber = 1;
+
+	cout << " flightNumber? ";
+	cin >> flightNumber;
+	cout << " departureCity? ";
+	cin >> departureCity;
+	cout << "arrivalCity? ";
+	cin >> arrivalCity;
+	cout << "seat number";
+	cin >> seatNumber;
+
+	db2.addFlight(flightNumber, departureCity, arrivalCity, seatNumber).displayFlightSchedule();
 
 }

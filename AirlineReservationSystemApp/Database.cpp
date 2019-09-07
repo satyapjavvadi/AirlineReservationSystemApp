@@ -5,64 +5,35 @@ using namespace std;
 
 namespace AirlineReservationSystemApp
 {
-	Passenger& Database::makeReservation(const string& firstName, const string& lastName, const string& emailAddress, const string& passportNumber)
+	// make reservation
+	Passenger& Database::addPassenger(const string& firstName, const string& lastName, const string& emailAddress, const string& passportNumber)
 	{
 		Passenger thePassenger(firstName, lastName, emailAddress, passportNumber);
-		thePassenger.setPassengerSeatNumber(mNextPassengerNumber++);
-		thePassenger.makeReservation();
-		pPassenger.push_back(thePassenger);
+		thePassenger.setSeatNumber(mNextPassengerNumber++);
+		pPassengers.push_back(thePassenger);
 
-		return pPassenger[pPassenger.size() - 1];
+		return pPassengers[pPassengers.size() - 1];
 	}
 
-	Passenger& Database::getPassenger(int passengerSeatNumber)
+	Passenger& Database::getPassenger(int newSeatNumber)
 	{
-		for (auto& Passenger : pPassenger)
+		for (auto& passenger : pPassengers)
 		{
-			if (Passenger.reserveSeat() == passengerSeatNumber)
+			if (passenger.getSeatNumber() == newSeatNumber)
 			{
-				return Passenger;
+				return passenger;
 			}
 		}
 		throw logic_error("No passenger found");
-	}
 
-	Passenger& Database::getPassenger(const string& firstName, const string& lastName, const string& emailAddress, const string& passportNumber)
+	}	
+
+	Flight& Database::addFlight(const std::string& flightNumber, const string& departureCity, const string& arrivalCity, int seatNumber)
 	{
-		for (auto& Passenger : pPassenger)
-		{
-			if (Passenger.getFirstName() == firstName && Passenger.getLastName() == lastName)
-			{
-				return Passenger;
-			}
-		}
-		throw logic_error("No passneger found");
-	}
+		Flight theFlight (flightNumber, departureCity, arrivalCity, seatNumber);
+		theFlight.setFlightSeatNumber(mNextSeatNumber++);		
+		fFlight.push_back(theFlight);
 
-	void Database::displayAll() const
-	{
-		for (const auto& Passenger : pPassenger)
-		{
-			Passenger.makeReservation();
-		}
-
-	}
-
-	void Database::displayAvailableseats() const
-	{
-		for (const auto& Passenger : pPassenger)
-		{
-			if (Passenger.reserveSeat())
-				Passenger.makeReservation();
-		}
-	}
-
-	void Database::displayBookedSeats() const
-	{
-		for (const auto& Passenger : pPassenger)
-		{
-			if (!Passenger.reserveSeat())
-				Passenger.makeReservation();
-		}
+		return fFlight[fFlight.size() - 1];
 	}
 }
