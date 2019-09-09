@@ -6,34 +6,58 @@ using namespace std;
 namespace AirlineReservationSystemApp
 {
 	// make reservation
-	Passenger& Database::addPassenger(const string& firstName, const string& lastName, const string& emailAddress, const string& passportNumber)
+	Passenger& Database::addPassenger(const string& firstName, const string& lastName, const string& passportNumber, const string& dateofJourney, int flightNumber, int seatNumber)
 	{
-		Passenger thePassenger(firstName, lastName, emailAddress, passportNumber);
-		thePassenger.setSeatNumber(mNextPassengerNumber++);
-		pPassengers.push_back(thePassenger);
+		Passenger newPassenger(firstName, lastName, passportNumber, getNextTicketNumber(), dateofJourney, flightNumber, seatNumber);
+		mPassengers.push_back(newPassenger);
 
-		return pPassengers[pPassengers.size() - 1];
+		return mPassengers[mPassengers.size() - 1];
 	}
 
-	Passenger& Database::getPassenger(int newSeatNumber)
+	Passenger& Database::getPassenger(const std::string& firstName,	const std::string& lastName)
 	{
-		for (auto& passenger : pPassengers)
+		for (auto& passenger : mPassengers)
 		{
-			if (passenger.getSeatNumber() == newSeatNumber)
+			if (passenger.getFirstName() == firstName && passenger.getLastName() == lastName)
 			{
 				return passenger;
 			}
 		}
-		throw logic_error("No passenger found");
 
+		throw logic_error("No passenger found");
 	}	
 
-	Flight& Database::addFlight(const std::string& flightNumber, const string& departureCity, const string& arrivalCity, int seatNumber)
+	Flight& Database::addFlight(int flightNumber, const string& departureCity, const string& arrivalCity)
 	{
-		Flight theFlight (flightNumber, departureCity, arrivalCity, seatNumber);
-		theFlight.setFlightSeatNumber(mNextSeatNumber++);		
-		fFlight.push_back(theFlight);
+		Flight newFlight(flightNumber, departureCity, arrivalCity, kMaxFlightCapacity);
+		mFlights.push_back(newFlight);
 
-		return fFlight[fFlight.size() - 1];
+		return newFlight;
+	}
+
+	vector<Flight>& Database::getAllFlights()
+	{
+		return mFlights;
+	}
+
+	Flight& Database::getFlight(int flightNumber)
+	{
+		for (auto& flight : mFlights)
+		{
+			if (flight.getFlightNumber() == flightNumber)
+				return flight;
+		}
+
+		throw logic_error("No flight found");
+	}
+
+	vector<Passenger>& Database::getAllPasssengers()
+	{
+		return mPassengers;
+	}
+
+	int Database::getNextTicketNumber()
+	{
+		return mNextTicketNumber++;
 	}
 }

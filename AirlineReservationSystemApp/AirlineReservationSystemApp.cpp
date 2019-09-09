@@ -3,21 +3,25 @@
 
 #include <iostream>
 #include "Database.h"
+#include "Flight.h"
 
 using namespace std;
 using namespace AirlineReservationSystemApp;
 
+
 int displayMenu();
-void makeReservation(Database& db1);
-void showPassengerDetails(Database& db1);
-void showFlightSchedule(Database& db2);
+void makeReservation(Database& db);
+void displayAllFlights(Database& db);
+void showPassengerDetails(Database& db);
+void showFlightDetails(Database& db);
+void showPassengerTicketDetails(Database& db);
 
 int main()
 {
-	Database passengerDB;
-	Database flightDB;
-	Flight theFlight;
-		
+	Database db;
+
+	db.addFlight( 1 , "Seattle", "Chicago");
+	db.addFlight( 2 , "Dallas", "Phoenix");
 
 	while (true)
 	{
@@ -26,21 +30,21 @@ int main()
 		{
 		case 0: 
 			return 0;
-		case 1:			
-			theFlight.displayFlightSchedule();
-			showFlightSchedule(flightDB);
+		case 1:
+			displayAllFlights(db);
 			break;
 		case 2:
-			showFlightSchedule(flightDB);
+			displayAllFlights(db);
+			makeReservation(db);
 			break;
 		case 3:
-			//showPassengerDetails(passengerDB);
+			showPassengerDetails(db);
 			break;
 		case 4:
-			//showFlightDetails();
+			showFlightDetails(db);
 			break;
 		case 5:
-			//showPassengerTicketDetails();
+			showPassengerTicketDetails(db);
 			break;
 		default :
 			cerr << "Unknown command" << endl;
@@ -57,8 +61,8 @@ int displayMenu()
 	cout << endl;
 	cout << "Airline Reservation System" << endl;
 	cout << "---------------------------" << endl;
-	cout << "1. Reserve a seat" << endl;
-	cout << "2. Flight schedule" << endl;
+	cout << "1. Flight schedule" << endl;
+	cout << "2. Reserve a seat" << endl;
 	cout << "3. Passenger details" << endl;
 	cout << "4. Flight details" << endl;
 	cout << "5. Passenger ticket information" << endl;
@@ -66,62 +70,114 @@ int displayMenu()
 	cout << "-----------------------" << endl;
 	cout << endl;
 
+	cout << "Enter a choice: ";
 	cin >> choice;
 
 	return choice;
-
 }
 
-void makeReservation(Database& db1)
+void displayAllFlights(Database& db)
+{
+	std::vector<Flight> flights =  db.getAllFlights();
+	cout << "All flights" << endl << endl;
+	cout << "Flight number" << "\t" << "Departure city" << "\t" << "Arrival city" << "\t" << "Available seats" << "\t" << endl;
+
+	for (const auto& flight : flights)
+	{
+		flight.display();
+	}
+}
+
+void makeReservation(Database& db)
 {
 	string firstName;
 	string lastName;
-	string emailAddress;
+	int flightNumber;
+	int seatNumber;
 	string passportNumber;
-	 
-	cout << " firstName? ";
-	cin >> firstName;
-	cout << " lastName? ";
-	cin >> lastName;
-	cout << "emailAddress? ";
-	cin >> emailAddress;
-	cout << "passportNumber? ";
-	cin >> passportNumber;
+	string dateofJourney;
 
-	db1.addPassenger(firstName, lastName, emailAddress, passportNumber);
-
-}
-
-void showPassengerDetails(Database& db1)
-{
-	int passengerNumber;
-	cout << "Passenger number: ";
-	cin >> passengerNumber;
-
-	db1.getPassenger(passengerNumber).display();
-
-}
-
-
-void showFlightSchedule(Database& db2)
-{
-	string flightNumber;
-	string departureCity;
-	string arrivalCity;
-	//string departureTime;
-	//string arrivalTime;
-	int availableSeats = 2;
-	int seatNumber = 1;
-
-	cout << " flightNumber? ";
+	cout << endl << "FlightNumber: ";
 	cin >> flightNumber;
-	cout << " departureCity? ";
-	cin >> departureCity;
-	cout << "arrivalCity? ";
-	cin >> arrivalCity;
-	cout << "seat number";
-	cin >> seatNumber;
+	
+	// check for availability
+	Flight& flight = db.getFlight(flightNumber);
+	int availableSeats = flight.getAvailableSeats();
+	if (availableSeats < 1)
+	{
+		cout << "No avaialable seats in the flight";
+		return;
+	}
+	
+	cout << "First name: ";
+	cin >> firstName;
+	cout << "Last name: ";
+	cin >> lastName;	
+	cout << "Passport number: ";
+	cin >> passportNumber;
+	cout << "Date of journey: ";
+	cin >> dateofJourney;
+	
+    seatNumber = kMaxFlightCapacity - availableSeats + 1;
+	db.addPassenger(firstName, lastName, passportNumber, dateofJourney, flightNumber, seatNumber);
 
-	db2.addFlight(flightNumber, departureCity, arrivalCity, seatNumber).displayFlightSchedule();
+	// update flight's available seats
+	flight.setAvailableSeats(availableSeats - 1);
+
+	cout << endl << "Reservation is successful" << endl;
+}
+
+void showPassengerDetails(Database& db)
+{
+	string firstName;
+	string lastName;
+
+	cout << "FirstName: ";
+	cin >> firstName;
+	cout << "LastName: ";
+	cin >> lastName;
+
+	Passenger& passenger = db.getPassenger(firstName, lastName);
+	cout << endl << "Passenger Details: " << endl;
+	cout << "------------------------" << endl;
+	cout << "First name: " << passenger.getFirstName() << endl;
+	cout << "Last name: " << passenger.getLastName() << endl;
+	cout << "Passport number: " << passenger.getPassportNumber() << endl;
+}
+
+
+void showPassengerTicketDetails(Database& db)
+{
+	string firstName;
+	string lastName;
+
+	cout << "FirstName: ";
+	cin >> firstName;
+	cout << "LastName: ";
+	cin >> lastName;
+
+	Passenger& passenger = db.getPassenger(firstName, lastName);
+	cout << endl << "Passenger Ticket Details: " << endl;
+	cout << "------------------------" << endl;
+	cout << "First name: " << passenger.getFirstName() << endl;
+	cout << "Last name: " << passenger.getLastName() << endl;
+	cout << "Ticket Number : " << passenger.getTicketNumber() << endl;
+	cout << "Date of journey: " << passenger.getDateofJourney() << endl;
+	cout << "Flight number : " << passenger.getFlightNumber() << endl;
+	cout << "Seat number: " << passenger.getSeatNumber() << endl;
+}
+
+void showFlightDetails(Database& db)
+{
+	int flightNumber;
+
+	cout << endl << "FlightNumber: ";
+	cin >> flightNumber;
+
+	// check for availability
+	Flight& flight = db.getFlight(flightNumber);
+
+	cout << endl << "Flight number" << "\t" << "Departure city" << "\t" << "Arrival city" << "\t" << "Available seats" << "\t" << endl;
+	flight.display();
 
 }

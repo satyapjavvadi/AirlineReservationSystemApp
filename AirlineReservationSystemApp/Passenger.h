@@ -2,44 +2,45 @@
 #include<string>
 
 namespace AirlineReservationSystemApp
-{	
-	const int kDefaultStartingSeatnumber = 1;
+{		
 	class Passenger
 	{
 	public:
 
 		Passenger() = default;
-		Passenger(const std::string& firstName, const std::string& lastName, const std::string& emailAddress, const std::string& passportNumber);
+		Passenger(const std::string& firstName, const std::string& lastName, const std::string& passportNumber, int ticketNumber, const std::string& dateofJourney, int flightNumber, int seatNumber);
 		
-		void display() const;
-
 		//getters and setters
 		void setFirstName(const std::string firstName);
 		const std::string& getFirstName() const;
 
 		void setLastName(const std::string lastName);
-		const std::string& getLastName() const;
-
-		void setEmailAddress(const std::string emailAddress);
-		const std::string& getEmailAddress() const;
+		const std::string& getLastName() const;	
 
 		void setPassportNumber(const std::string passportNumber);
 		const std::string& getPassportNumber() const;
 
-		void setSeatNumber(int newSeatNumber);
+		void setTicketNumber(int ticketNumber);
+		int getTicketNumber() const;
+
+		void setDateofJourney(const std::string dateofJourney);
+		const std::string& getDateofJourney() const;
+
+		void setFlightNumber(int flightNumber);
+		int getFlightNumber() const;
+
+		void setSeatNumber(int seatNumber);
 		int getSeatNumber() const;	
 
-		bool isReserved() const;
 
 	private:
-
 		// passenger info
-
-		std::string pFirstName;
-		std::string pLastName;
-		std::string pEmailAddress;
-		std::string pPassportNumber;
-		int pSeatNumber = kDefaultStartingSeatnumber;	
-		bool pReservation = false;
+		std::string mFirstName;
+		std::string mLastName;
+		std::string mPassportNumber;
+		int mTicketNumber;
+		std::string mDateofJourney;
+		int mFlightNumber;		
+		int mSeatNumber;
 	};
 }

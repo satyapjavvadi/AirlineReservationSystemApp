@@ -4,29 +4,33 @@
 #include "Passenger.h"
 #include "Flight.h"
 
+using namespace std;
+
 namespace AirlineReservationSystemApp
 {
-	const int kFirstPassengerNumber = 100;
-	const int kFirstSeatNumber = 1;
+	const int kMaxFlightCapacity = 100;
+	const int kFirstTicketNumber = 1;
 
 	class Database
 	{
 	public:
-		Passenger& addPassenger(const std::string& firstName, const std::string& lastName, const std::string& passportNumber, const std::string& emailAddress);
-		Passenger& getPassenger(int newSeatNumber);
-		Passenger& getPassenger(const std::string& firstName, const std::string& lastName, const std::string& passportNumber, const std::string& emailAddress);
+		vector<Flight>& getAllFlights();
+		Flight& addFlight(int flightNumber, const std::string& departureCity, const std::string& arrivalCity);
+		Flight& getFlight(int flightNumber);
+		
+		vector<Passenger>& getAllPasssengers();
+		Passenger& addPassenger(const std::string& firstName, const std::string& lastName, const std::string& passportNumber, const string& dateofJourney, int flightNumber, int seatNumber);
+		Passenger& getPassenger(const std::string& firstName, const std::string& lastName);
 
-		Flight& addFlight(const std::string& flightNumber, const std::string& departureCity, const std::string& arrivalCity, int availableSeats);
-		Flight& getFlight(int seatNumber);
-
-		void displayFlightSchedule() const;
+		int getNextTicketNumber();
 
 	private:
-		std::vector<Passenger> pPassengers;
-		int mNextPassengerNumber = kFirstPassengerNumber;
+		// list of all flights
+		vector<Flight> mFlights;
 
-		std::vector<Flight> fFlight;
-		int mNextSeatNumber = kFirstSeatNumber;
+		// list of all passengers who made a reservation
+		vector<Passenger> mPassengers;
 
+		int mNextTicketNumber = kFirstTicketNumber;
 	};
 }
